@@ -1,0 +1,135 @@
+
+.panel-heading{
+	background-color : #F1DFEA;
+	border	 : 1px solid #F1DFEA;
+	color : #004989;
+}
+
+.panel-body{
+	color :#004989 ;
+	border	 : 1px solid #F1DFEA;
+}
+
+.jumbotron-session{
+	border: 1px solid;
+	background-color : #F1DFEA;
+	color : #004989;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.list-group-item-custom {
+	background-color : #F1DFEA;
+	border	 : 1px solid #F1DFEA;
+	color : #004989;
+}
+
+.fa{
+	color:#004989;
+}
+
+
+.angular-google-map-container
+{
+    width:500px;
+    height:480px;
+}
+
+.app, .app-body {
+    height: 100%;
+    overflow: hidden;
+	background-color: #fff;
+}
+
+
+.btn-custom {
+	color: #FFF;
+	background-color : #004989;
+	border-color : #FFF;
+}
+
+.link-custom {
+	color: #004989;
+}
+.text-custom{
+	color:#004989;
+}
+
+.label-custom{
+	background-color:#004989;
+}
+
+.hr-custom{
+	border-top: 2px solid #F163B6;
+}
+
+
+.switch.active {
+  background-color : #004989;
+  border-color : #004989;
+
+}
+
+.my-switch{
+ width: 48px;
+ height: 24px;
+}
+
+
+.switch .switch-handle {
+    width: 24px;
+    height: 24px;
+}
+
+.switch.active .switch-handle {
+  border-color : #004989;
+  width: 24px;
+  height: 24px;
+  transform: translate(24px,0);
+}
+
+.centered {
+    display: table-cell;
+    vertical-align: middle;
+	margin: 0 auto;
+}
+
+#annalogo{
+	display: block;
+	    margin-left: auto;
+	    margin-right: auto;
+	border : 1px solid #ccc;
+	 width: 20%;
+	 height: 20%;
+}
+
+.session-img{
+ 	width: 80%;
+ 	height: 80%;
+
+}
+
+.row-in-jumbo {
+/*this should avoid overlapping*/
+    margin-left: -20px;
+    margin-right: -30px;
+}
+
+.btn-group > .btn-default.active  {
+	color: #fff;
+	background-color:#004989;
+	opacity: .65;
+	border-color:#004989;
+}
+
+.btn-group > .btn-default.active:hover  {
+	color: #fff;
+	background-color:#004989;
+	opacity: .65;
+	border-color:#004989;
+}
+
+.bootstrap-datetimepicker-widget table td.active, .bootstrap-datetimepicker-widget table td.active:hover {
+	background-color:#004989;
+}
+

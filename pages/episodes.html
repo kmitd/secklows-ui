@@ -1,0 +1,25 @@
+	 <div class="container" >		
+	 		<div class="scrollable" >
+	 		  <div class="scrollable-content">
+	 		    <div class="section" ui-state="searchBar">
+
+
+	   			    <div class="list-group">
+	   			      <a ng-repeat="epi in episodes | orderBy : orderProp | filter: query " ng-if="filterFct(epi)" ng-click="openEpisode(epi)" ng-swipe-right="openEpisode(epi)" class="list-group-item">
+	 					<!-- <span  class="label label-custom">{{epi.name}}</span> -->
+						 <text class='text-custom'>{{epi.name}}<i class="fa fa-chevron-right pull-right"></i> </text>
+	   			        <!-- <text class='text-custom'>{{ses.sessionType}}, {{ses.area}}</text> <i class="fa fa-chevron-right pull-right"></i> -->
+	   			      </a>
+	   			    </div>
+		       
+
+	 				<h5>
+	 					<input  ng-model="query" type="search" class="form-control" placeholder="Search episode..." />
+	 				</h5>
+
+
+	 		    </div>
+	 		  </div>
+	 		</div>
+
+	 </div>

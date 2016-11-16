@@ -1,0 +1,39 @@
+	 <div class="container" >		
+	 		<div class="scrollable" >
+	 		  <div class="scrollable-content">
+	 		    <div class="section" ui-state="searchBar">
+					
+					<h2  class='text-custom'>Search entity</h2>
+	 				<h5>
+	 					<input  ng-model="query" type="search" class="form-control" placeholder="Search episode..." />
+	 				</h5>
+					
+					<h2  class='text-custom'>Related episodes</h2>
+	   			    
+	 					<!-- <span  class="label label-custom">{{epi.name}}</span> -->
+						 
+						
+			  			  <div ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities " ng-click="openEpisode(epi)" class="panel panel-info" >
+			  			    <div class="panel-heading">        
+			  			      <h4 class="panel-title">
+			  			          {{epi.name}}
+			  			      </h4>
+			  			    </div>
+			  			    <div>
+			  			      <div class="panel-body" ng-if="query">
+			  			        <strong>Description</strong> {{epi.descr | limitTo:500 }} <a ng-click="openEpisode(epi)">...</a>
+			  					<p></p>
+			  					<!-- <strong>Tags</strong>
+			  					<p  ng-repeat="ent in epi.entities | filter : query : comparator : epi.entities">
+									<span class="label label-custom">{{ent}}</span></p> -->
+			  			      </div>
+				  
+				  
+			  			    </div>
+			  			  </div>
+					
+<!-- close last 4 divs -->
+	 		    </div>
+	 		  </div>
+	 		</div>
+	 </div>

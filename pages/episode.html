@@ -1,0 +1,38 @@
+
+<div class="container"  ng-swipe-left="goto('home')" >		
+	<div class="scrollable">
+		<div class="scrollable-content section"  >
+			
+			  <div class="panel panel-info" >
+			    <div class="panel-heading">        
+			      <h4 class="panel-title">
+			          {{currentEpisode.name}}
+			      </h4>
+			    </div>
+			    <div>
+			      <div class="panel-body">
+			        <strong>Title</strong>  {{currentEpisode.title}}
+					<p/>
+			        <strong>Description</strong> {{currentEpisode.descr}}
+					<p/>
+					<strong>Tags</strong>
+					<!-- <div class="panel panel-default" ng-repeat="i in [1,2,3]"> -->
+					<p  ng-repeat="ent in currentEpisode.entities"><span class="label label-custom">{{ent}}</span></p>
+			      </div>
+				  
+				  
+			    </div>
+			  </div>
+			
+			
+			
+			<h3>
+				<a><i class="fa fa-chevron-circle-left"  ng-click="home()"></i></a>
+			</h3>
+			
+				
+		</div>
+			
+		
+	</div>
+</div>
