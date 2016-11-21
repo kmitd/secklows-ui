@@ -3,35 +3,87 @@
 	 		  <div class="scrollable-content">
 	 		    <div class="section" ui-state="searchBar">
 					
-					<h2  class='text-custom'>Search entity</h2>
-	 				<h5>
-	 					<input  ng-model="query" type="search" class="form-control" placeholder="Search episode..." />
-	 				</h5>
-					
-					<h2  class='text-custom'>Related episodes</h2>
-	   			    
-	 					<!-- <span  class="label label-custom">{{epi.name}}</span> -->
-						 
+						<div class="col-lg-2">
+							<div class="panel panel-info" >
+								<img class="thumbnail" style="background-color:#004989; padding: 0px" src="./docs/ssLogo.svg" >
+								<p style="color:#004989" class="text-center">Community Radio for Milton Keynes. Bringing people and communities together.</p> 
+								<br/>
+							</div>
+						</div>
+			
+						<div class="col-lg-4">
+							<div class="panel panel-info"> 
+								<div class="panel-heading"> 
+									<h3 class="panel-title">Listen to live radio</h3> 
+								</div> 
+								<div class="panel-body"> 
 						
-			  			  <div ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities " ng-click="openEpisode(epi)" class="panel panel-info" >
-			  			    <div class="panel-heading">        
-			  			      <h4 class="panel-title">
-			  			          {{epi.name}}
-			  			      </h4>
-			  			    </div>
-			  			    <div>
-			  			      <div class="panel-body" ng-if="query">
-			  			        <strong>Description</strong> {{epi.descr | limitTo:500 }} <a ng-click="openEpisode(epi)">...</a>
-			  					<p></p>
-			  					<!-- <strong>Tags</strong>
-			  					<p  ng-repeat="ent in epi.entities | filter : query : comparator : epi.entities">
-									<span class="label label-custom">{{ent}}</span></p> -->
-			  			      </div>
-				  
-				  
-			  			    </div>
-			  			  </div>
+									<a >
+										<i class="fa fa-play fa-3x pull-left" ng-hide="!audio.paused" ng-click="audio.paused ? audio.play() : audio.pause()" ></i> 
+										<i class="fa fa-pause fa-3x pull-left" ng-hide="audio.paused" ng-click="audio.paused ? audio.play() : audio.pause()"></i>
+									</a>
+									
+									<a>
+										<i class="fa fa-volume-off fa-3x pull-right" ng-click="audio.volume==1 ? audio.volume=0 : audio.volume=1" ></i> 
+									</a>
+						 	
+									<input style="width:80%"  class='form-control pull-right' type=range min=0 max=1 step=0.01 ng-model='audio.volume'>
+								</div> 
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="panel panel-info"> 
+								<div class="panel-heading"> 
+									<h3 class="panel-title">Entity search</h3> 
+								</div> 
+								<div class="panel-body"> 
+									<input  ng-model="query" type="search" class="form-control" placeholder="Search episode..." />
+									<p></p>
+									<p  class='text-custom'>...or use an example</p>
+						
+									<ui-state id='activeTab' default=''></ui-state>
+									<div class="btn-group nav-tabs justified">
+									        <a ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index'  ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" class="btn btn-default">{{ex}}</a>
+							
+
+									 </div>
+								</div> 
+							</div>
+					</div>
 					
+					
+			
+					
+									
+					<div class="col-lg-12">
+						<div class="panel panel-info"> 
+							<div class="panel-heading"> 
+								<h3 class="panel-title">Related episodes</h3> 
+							</div> 
+							<div class="panel-body">
+								
+								<div ng-show="false">
+									<h5 ng-repeat="e in entities | filter : query" ng-if="query"> 
+										<span class="label label-custom" >{{e.label}}</span>
+			 						</h5>
+								</div>
+								
+								<ul class="list-group">
+									<li ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities " ng-hide="!query" ng-click="openEpisode(epi)"  class="list-group-item">
+										<p><strong>{{epi.name}}</strong>
+											 {{epi.descr | limitTo:500 }} ...
+										</p>
+										
+									</li>
+									
+								</ul>
+							
+							</div> 
+						</div>
+					</div>
+					
+					
+				
 <!-- close last 4 divs -->
 	 		    </div>
 	 		  </div>

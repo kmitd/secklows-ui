@@ -1,10 +1,11 @@
-var app = angular.module('SecklowApp', [
+var app = angular.module('SecklowApp', [ 
     "ngRoute",
     "ngTouch",
-    "mobile-angular-ui"
-]);
+	'selector',
+	'ngAudio',
+	"mobile-angular-ui"])
 
-app.config(function($routeProvider, $locationProvider) {
+.config(function($routeProvider, $locationProvider) {
     $routeProvider.when('/', {
        // templateUrl: "pages/episodes.html"
 		 templateUrl: "pages/search.html"
@@ -17,19 +18,35 @@ app.config(function($routeProvider, $locationProvider) {
 });
 
 
-
-
-app.controller('MainController', ['$scope',  '$http', '$location',
-    function($scope, $http, $location) {   
+app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio',
+    function($scope, $http, $location, ngAudio) {   
       
+	  
 	    $scope.orderProp = "name"; 
 		
 		$http.get('docs/secklow_ann.json').success(function(data) {
 		   $scope.episodes = data;
 		});
 		
+		$http.get('docs/entities.json').success(function(data) {
+			$scope.entities = data;
+
+		});
 		
-		
+ 	   $scope.examples = [ "Ed Sheeran", "Milton Keynes", "Fenny_Stratford", "Open_University"];	
+	   
+	   
+	   $scope.audio = ngAudio.load("http://31.25.191.64:8000/;stream/1");
+	   
+	
+	   
+
+	   
+	   $scope.test = function(ex,ix){
+		   // TODO this should happen in the html
+		   $scope.activeTab = ix;
+		   $scope.query = ex;
+	   };
 		// this does not show episodes with no entities
 		// TODO use angular for this
 		$scope.filterFct = function(epi){

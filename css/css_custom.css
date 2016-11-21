@@ -128,8 +128,3 @@
 	opacity: .65;
 	border-color:#004989;
 }
-
-.bootstrap-datetimepicker-widget table td.active, .bootstrap-datetimepicker-widget table td.active:hover {
-	background-color:#004989;
-}
-
