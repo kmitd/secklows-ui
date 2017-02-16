@@ -59,34 +59,6 @@
 	background-color:#004989;
 }
 
-.hr-custom{
-	border-top: 2px solid #F163B6;
-}
-
-
-.switch.active {
-  background-color : #004989;
-  border-color : #004989;
-
-}
-
-.my-switch{
- width: 48px;
- height: 24px;
-}
-
-
-.switch .switch-handle {
-    width: 24px;
-    height: 24px;
-}
-
-.switch.active .switch-handle {
-  border-color : #004989;
-  width: 24px;
-  height: 24px;
-  transform: translate(24px,0);
-}
 
 .centered {
     display: table-cell;
@@ -94,26 +66,6 @@
 	margin: 0 auto;
 }
 
-#annalogo{
-	display: block;
-	    margin-left: auto;
-	    margin-right: auto;
-	border : 1px solid #ccc;
-	 width: 20%;
-	 height: 20%;
-}
-
-.session-img{
- 	width: 80%;
- 	height: 80%;
-
-}
-
-.row-in-jumbo {
-/*this should avoid overlapping*/
-    margin-left: -20px;
-    margin-right: -30px;
-}
 
 .btn-group > .btn-default.active  {
 	color: #fff;
@@ -127,4 +79,22 @@
 	background-color:#004989;
 	opacity: .65;
 	border-color:#004989;
+}
+
+.pager > li > a {
+	margin : 2px;
+}
+
+.gmap {
+	height : 500px;
+}
+
+.fake-link {
+	cursor:pointer;
+    
+}
+.fake-link:hover {
+/*	background-color:rgba(255,0,0,0.3);*/
+	box-shadow: inset 0 0 0 2px rgb(188, 232,241);
+    
 }

@@ -3,22 +3,97 @@
 	<div class="scrollable">
 		<div class="scrollable-content section"  >
 			
+			<div ui-content-for="modals">
+			  <div class="scrollable-content  modal" ui-if="event" ui-state="event">
+			    	<div class="modal-overlay"> 
+				</div>
+  
+			    <div class="modal-dialog">
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <button class="close" ui-turn-off="event" ng-click="reset()">x</button>
+			          <h4 class="modal-title"  ng-show="hasDatahubInfo()" >More info from the datahub </h4>
+					  <h4 class="modal-title" ng-hide="hasDatahubInfo()">No info from the datahub!</h4>
+			        </div>
+      
+			        <div ng-show="hasDatahubInfo()" class="modal-body">
+						<h3 class="text-custom">{{currentEnt}}</h3>
+							<br/>
+						
+ 						   <div ng-show="entityInfo['coordinates']" map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
+ 								<h4 class="text-custom">Map</h4>
+								<ng-map class="gmap" center="{{entityInfo['coordinates']}}" zoom="13">
+ 							  	  	<marker position="{{entityInfo['coordinates']}}" data="0" title="title"></marker>
+ 							  	</ng-map>
+ 							<hr/>
+							</div>
+							
+							
+							<div class="row"> 
+								<div ng-repeat="photo in entityInfo.photos"  class="col-sm-2 col-xs-2 col-md-2"> 
+									<div class="thumbnail"> 
+										<a href="{{photo.url}}" target="_blank">
+											<img alt="{{photo.alt}}" style="height: 80px; width: 100%; display: block;"   src="{{photo.thumbnail}}"  > 
+										</a>
+										<div class="caption"> 
+											<p >
+												{{limit(photo.desc)}}
+											</p> 
+										</div> 
+									</div> 
+								</div> 
+							</div>
+							
+							<div ng-show="entityInfo['age']">
+								<h4 class="text-custom">Population age</h4>
+								<canvas id="age-container" class="chart chart-bar " chart-data="entityInfo['age'].data" chart-labels="entityInfo['age'].labels"></canvas>
+							<hr/>
+							</div>
+							
+							
+							<div ng-show="entityInfo['economy']">
+								<h4 class="text-custom">Economical activities</h4>
+								 <canvas id="economy-bar-container" class="chart chart-bar " chart-options="entityInfo.economy.options" chart-data="entityInfo.economy.data"  chart-labels="entityInfo.economy.labels" ></canvas>
+							</div>
+							
+							<div >
+								<h4 class="text-custom" >Additional info</h4>
+								<ul class="list-group" >
+								<li class="list-group-item" ng-repeat="(key,prop) in entityInfo " ng-if="prop.other" >
+									<strong class="text-custom">{{key}}</strong>: {{prop.value}}
+								</li>
+								<ul>
+								<hr/>
+							</div>
+						
+							
+					</div> 
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			
+			
 			  <div class="panel panel-info" >
 			    <div class="panel-heading">        
 			      <h4 class="panel-title">
-			          {{currentEpisode.name}}
+			          {{currentEpisode.title}}
 			      </h4>
 			    </div>
 			    <div>
 			      <div class="panel-body">
 			        <strong>Title</strong>  {{currentEpisode.title}}
 					<p/>
-			        <strong>Description</strong> {{currentEpisode.descr}}
+			        <strong>Episode ID</strong> {{currentEpisode.name}}
 					<p/>
-					<strong>Tags</strong>
-					<!-- <div class="panel panel-default" ng-repeat="i in [1,2,3]"> -->
-					<p  ng-repeat="ent in currentEpisode.entities"><span class="label label-custom">{{ent}}</span></p>
-			      </div>
+					
+					
+					<strong>Tag Cloud</strong>
+					<div class="text-center">
+						<jqcloud id="wordcloud" words="words" ng-click="openInfo()" ui-turn-on="event"   afterWordRender="{{updateWord()}}" auto-resize="true" width="800" height="350" steps="10"></jqcloud>
+					</div>	 
+					 
+				  </div>
 				  
 				  
 			    </div>
