@@ -100,8 +100,6 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
 					
 					if (epi.entities[ent]['dh'].length > 0  ) {
 						epi.entities[ent]['weight'] = 5000;
-						
-						// console.log(epi.entities[ent]);
 					} 
 					epi.entities[ent]['color'] = 'green';
 					
@@ -184,13 +182,10 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
 		function getTopic(entity){
 			
 			var photoObject = [];
-			console.log(entity);
 			if (entity != undefined && entity.hasOwnProperty("global:topicOfPhoto")){
 				var photos = entity["global:topicOfPhoto"];
-				console.log(photos);
 				var max = photos.length < 12 || 12;  
 				for (var photoIx = 0 ; photoIx < max; photoIx++ ){
-					console.log(photos[photoIx]);
 					if (photos[photoIx].hasOwnProperty('global:thumbnail') ){
 							photoObject.push({ thumbnail : photos[photoIx]['global:thumbnail'][0], 
 												url: photos[photoIx]['social:url'][0],

@@ -44,6 +44,12 @@
 								</div> 
 							</div>
 							
+							<div ng-show="entityInfo['population_projection']">
+								<h4 class="text-custom">Population projection</h4>
+								<canvas id="pop-proj-container" class="chart chart-line " chart-data="entityInfo['population_projection'].data" chart-labels="entityInfo['population_projection'].labels"></canvas>
+							<hr/>
+							</div>
+							
 							<div ng-show="entityInfo['age']">
 								<h4 class="text-custom">Population age</h4>
 								<canvas id="age-container" class="chart chart-bar " chart-data="entityInfo['age'].data" chart-labels="entityInfo['age'].labels"></canvas>
@@ -89,8 +95,8 @@
 					
 					
 					<strong>Tag Cloud</strong>
-					<div class="text-center">
-						<jqcloud id="wordcloud" words="words" ng-click="openInfo()" ui-turn-on="event"   afterWordRender="{{updateWord()}}" auto-resize="true" width="800" height="350" steps="10"></jqcloud>
+					<div 	>
+						<jqcloud id="wordcloud" words="words" ng-click="openInfo()" ui-turn-on="event" autoResize="true"  afterWordRender="{{updateWord()}}" auto-resize="true" width="800" height="350" steps="10"></jqcloud>
 					</div>	 
 					 
 				  </div>
