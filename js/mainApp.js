@@ -27,7 +27,6 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
     function($scope, $http, $location, ngAudio, SharedState,ngMap) {   
       
 	 
- 
 		$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEJDKFSDl6ndtqnRykHyahKnoQG_KN_hQ";
 		$scope.words = [];
 		$scope.info = {};
