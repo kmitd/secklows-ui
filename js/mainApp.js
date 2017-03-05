@@ -6,7 +6,8 @@ var app = angular.module('SecklowApp', [
 	'ngSanitize',
 	"mobile-angular-ui",
 	"angular-jqcloud",
-	'ngMap', 'chart.js'
+	'ngMap', 'chart.js',
+	'matchMedia'
 ])
 
 .config(function($routeProvider, $locationProvider, ChartJsProvider) {
@@ -23,8 +24,8 @@ var app = angular.module('SecklowApp', [
 })
 
 
-app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'SharedState', 
-    function($scope, $http, $location, ngAudio, SharedState,ngMap) {   
+app.controller('MainController', ['$scope',  'screenSize', '$http', '$location', 'ngAudio', 'SharedState',
+    function($scope,  screenSize, $http, $location, ngAudio, SharedState,ngMap) {   
       
 	 
 		$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEJDKFSDl6ndtqnRykHyahKnoQG_KN_hQ";
@@ -33,7 +34,19 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
 		$scope.entityInfo = {};
 		$scope.dataHubEntities = {};
 	    $scope.orderProp = "name"; 
+	   
 		
+		
+		$scope.desktop = screenSize.on('sm, md, lg', function(match){
+		    $scope.desktop = match;
+			
+		});
+		$scope.mobile = screenSize.on('xs', function(match){
+		    $scope.mobile = match;
+		});
+		
+		
+		 
 		$http.get('docs/secklow_ann.json').success(function(data) {
 		   $scope.episodes = data;
 		   
@@ -57,7 +70,9 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
 			$scope.loading = false;
 		});
 		
-		
+		$scope.getWidth = function(){
+			return 800;
+		}
 		
  	   $scope.examples = [ "Wolverton", "Milton Keynes", "Fenny_Stratford", "Open_University",  "Campbell_park", 
 							"Shenley_brook_end", "Central_milton_keynes", "Milton_keynes_theatre", "Bletchley_park", "Cineworld"];	
@@ -92,6 +107,8 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
 		$scope.openEpisode= function(epi){
 			$scope.words = [];
 			$scope.currentEpisode = epi;
+			$scope.episodeAudio = ngAudio.load("./docs/audio_test.mp3"); 
+			
 			for (var ent=0; ent < epi.entities.length; ent++){
 				// if (epi.entities[ent]['dh'].length > 0  ){
 				
@@ -100,7 +117,7 @@ app.controller('MainController', ['$scope',  '$http', '$location', 'ngAudio', 'S
 					if (epi.entities[ent]['dh'].length > 0  ) {
 						epi.entities[ent]['weight'] = 5000;
 					} 
-					epi.entities[ent]['color'] = 'green';
+					epi.entities[ent]['color'] = '#e9294b';
 					
 					epi.entities[ent]['html'] = {class:'fake-link'};
 				}

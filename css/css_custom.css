@@ -2,18 +2,18 @@
 .panel-heading{
 	background-color : #F1DFEA;
 	border	 : 1px solid #F1DFEA;
-	color : #004989;
+	color : #e9294b;
 }
 
 .panel-body{
-	color :#004989 ;
+	color :#e9294b ;
 	border	 : 1px solid #F1DFEA;
 }
 
 .jumbotron-session{
 	border: 1px solid;
 	background-color : #F1DFEA;
-	color : #004989;
+	color : #e9294b;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -21,11 +21,11 @@
 .list-group-item-custom {
 	background-color : #F1DFEA;
 	border	 : 1px solid #F1DFEA;
-	color : #004989;
+	color : #e9294b;
 }
 
 .fa{
-	color:#004989;
+	color:#e9294b;
 }
 
 
@@ -44,19 +44,19 @@
 
 .btn-custom {
 	color: #FFF;
-	background-color : #004989;
+	background-color : #e9294b;
 	border-color : #FFF;
 }
 
 .link-custom {
-	color: #004989;
+	color: #e9294b;
 }
 .text-custom{
-	color:#004989;
+	color:#e9294b;
 }
 
 .label-custom{
-	background-color:#004989;
+	background-color:#e9294b;
 }
 
 
@@ -69,16 +69,16 @@
 
 .btn-group > .btn-default.active  {
 	color: #fff;
-	background-color:#004989;
+	background-color:#e9294b;
 	opacity: .65;
-	border-color:#004989;
+	border-color:#e9294b;
 }
 
 .btn-group > .btn-default.active:hover  {
 	color: #fff;
-	background-color:#004989;
+	background-color:#e9294b;
 	opacity: .65;
-	border-color:#004989;
+	border-color:#e9294b;
 }
 
 .pager > li > a {
@@ -91,10 +91,44 @@
 
 .fake-link {
 	cursor:pointer;
-    
 }
+
 .fake-link:hover {
-/*	background-color:rgba(255,0,0,0.3);*/
-	box-shadow: inset 0 0 0 2px rgb(188, 232,241);
-    
+	
+	color: #333;
+	background-color: #ffe6e6;
+	border-color: #ffe6e6;
+}
+
+.panel-custom  {
+/*	border-color: #ff6666;*/
+}
+
+.panel-custom > .panel-heading {
+	background-color: #ffe6e6;
+}
+
+
+
+.container-fluid > .navbar-header {
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.navbar-brand {
+	padding : 0px;
+}
+
+#imgLogo {
+	height: 50px;
+}
+
+#logoMobile {
+	margin-top: -10px;
+}
+
+#title {
+	margin-top: 15px;
+	margin-left: 5px;
+	margin-bottom: -15px;
 }

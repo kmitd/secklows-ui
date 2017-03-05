@@ -80,7 +80,7 @@
 			</div>
 			
 			
-			  <div class="panel panel-info" >
+			  <div class="panel panel-custom" >
 			    <div class="panel-heading">        
 			      <h4 class="panel-title">
 			          {{currentEpisode.title}}
@@ -88,15 +88,44 @@
 			    </div>
 			    <div>
 			      <div class="panel-body">
-			        <strong>Title</strong>  {{currentEpisode.title}}
-					<p/>
-			        <strong>Episode ID</strong> {{currentEpisode.name}}
+					  
+					 <strong> Listen to the episode</strong>
+					 <br/>
+					 <div class="btn-group btn-group-justified" > 
+						 <a ng-click="episodeAudio.paused ? episodeAudio.play() : episodeAudio.pause()" class="btn btn-default" >
+  						  <i ng-hide="!episodeAudio.paused" class="fa fa-play fa-2x" ></i>
+  						  <i ng-hide="episodeAudio.paused" class="fa fa-pause fa-2x" ></i>
+						 </a> 
+						 <a  class="btn btn-default" >
+						 	<input class="form-control" type="range" min="0" max="1" step="0.01" ng-model="episodeAudio.progress">
+						 </a> 
+						 <a class="btn btn-default" >
+							 {{episodeAudio.currentTime | trackTime}}	
+							  
+						 </a> 
+
+						 <a class="btn btn-default " ng-click="episodeAudio.volume==1 ? episodeAudio.volume=0 : episodeAudio.volume=1">
+						     <i class="fa fa-volume-off fa-2x " ng-show="episodeAudio.volume==1" ></i>
+						     <i class="fa fa-volume-up fa-2x" ng-show="episodeAudio.volume==0" ></i>
+			
+						 </a>
+
+						 <a class="btn btn-default" >
+							<input  class='form-control' type=range min=0 max=1 step=0.01 ng-model='episodeAudio.volume'>
+						 </a>
+					 </div>
+					  
+					  
+					  
+			        <!-- <strong>Title</strong>  {{currentEpisode.title}} -->
+					<!-- <p/> -->
+			        <!-- <strong>Episode ID</strong> {{currentEpisode.name}} -->
 					<p/>
 					
 					
-					<strong>Tag Cloud</strong>
-					<div 	>
-						<jqcloud id="wordcloud" words="words" ng-click="openInfo()" ui-turn-on="event" autoResize="true"  afterWordRender="{{updateWord()}}" auto-resize="true" width="800" height="350" steps="10"></jqcloud>
+					<strong>What did we talk about?</strong>
+					<div >
+						<jqcloud id="wordcloud" words="words" ng-click="openInfo()" ui-turn-on="event" autoResize="true"  afterWordRender="{{updateWord()}}" auto-resize="true"  height="350" steps="10"></jqcloud>
 					</div>	 
 					 
 				  </div>

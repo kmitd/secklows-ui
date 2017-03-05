@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
-    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="./docs/logos/favicon.png" type="image/x-icon" />
 
     <link rel="stylesheet" href="./css/mobile-angular-ui-hover.min.css" />
     <link rel="stylesheet" href="./css/mobile-angular-ui-base.min.css" />
@@ -34,7 +34,7 @@
 	<script src="./js/Chart.min.js"></script>
 	<script src='./js/angular-chart.min.js'></script>
 	<script src="./js/jqcloud.min.js"></script>
-
+	<script src='./js/match-media.js'></script>
     <script src="js/mainApp.js"></script>
 	
 	
@@ -46,19 +46,30 @@
  
  <div class="app">
 
-     <div class="navbar navbar-app navbar-absolute-top" >
 
-         <div class="navbar-brand" yield-to="title">
-             <span class="text-custom" id="title"><i class="fa fa-music fa-lg"> </i> Secklow Sound data<i class="fa fa-music fa-lg"></i> </span>
-         </div>
-         
-     </div>
-
-     <div class="navbar navbar-app navbar-absolute-bottom">
-
-         <div class="btn-group justified">
+	 <nav class="navbar navbar-default" >
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand " yield-to="title" href="#">
+		        <img id="imgLogo" alt="Brand" src="./docs/logos/favicon.png"/>
+		      </a>
+			  <div id="title" class="navbar-brand ">
+				<img  ng-if="mobile" id="logoMobile" src='./docs/logos/ss.png'/>
+			  	<span ng-if="desktop" class="text-custom" > <strong style="color:grey">Secklow Sounds</strong> <strong>community radio for  </strong> <strong style="color:black">Milton Keynes</strong>  </span> 
+			  </div>
+		    </div>
            
-         </div>
+                
+
+   		
+			
+		  </div>
+	</nav>
+     
+	 
+	 <div class="navbar navbar-app navbar-absolute-bottom">
+
+         <span class="text-custom" id="title">  <strong>  </strong> </span> 
 
      </div>
 
