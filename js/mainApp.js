@@ -7,6 +7,7 @@ var app = angular.module('SecklowApp', [
 	"mobile-angular-ui",
 	"angular-jqcloud",
 	'ngMap', 'chart.js',
+	"ng.deviceDetector",
 	'matchMedia'
 ])
 
@@ -19,28 +20,56 @@ var app = angular.module('SecklowApp', [
 	    templateUrl: 'pages/episode.html'
 	});
 	
-	ChartJsProvider.setOptions({ colors : [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'] });
+	ChartJsProvider.setOptions({ colors : [ '#e9294b', '#302d2f', '#a7a9ac', '#21a3a6', '#818387', '#949FB1', '#4D5360'] });
 	
 })
 
+angular.module('SecklowApp').filter('randomize', function() {
+  return function(input, scope) {
+	icons = [ "circles", "flower-of-life","icosahedron" , "metatron-cube", "octahedron" ]
+    if (input!=null && input!=undefined && input > 1) {
+		return icons[Math.floor((Math.random()*input)+1)];
+    }  
+  }
+});
 
-app.controller('MainController', ['$scope',  'screenSize', '$http', '$location', 'ngAudio', 'SharedState',
-    function($scope,  screenSize, $http, $location, ngAudio, SharedState,ngMap) {   
+app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$http', '$location', 'ngAudio', 'SharedState',
+    function($scope,  screenSize, deviceDetector, $http, $location, ngAudio, SharedState,ngMap) {   
       
-	 
+	  	if (deviceDetector.os == 'android' ) {
+	  		$scope.sms = "sms:+447539509448?body=My%20text%20for%20Secklow%20Sounds";
+	  	} else if (deviceDetector.os == 'ios') {
+			//works for IOS 5,6
+			$scope.sms ="sms:+447539509448&body=My%20text%20for%20Secklow%20Sounds";
+	  	} 
+		
+		$scope.isUnknown = function(){
+			if (deviceDetector.device == 'unknown') {
+				return true; 
+			}
+			return false;
+		} 
+		
+		console.log(deviceDetector.os_version);
+	  	console.log(deviceDetector.browser);
+	  	console.log(deviceDetector.device);
+
+		$scope.colors = ["F5C9C9","EDB3C6","#E59FCA", "#DD8CD5", "#C27AD5", "#9B68CD", "#6E58C5", "#4953BD", "#3A6AB5", "#2D85AD", "#21A3A6"];
+		$scope.sms =  "sms:+447539509448?body=My%20text%20for%20Secklow%20Sounds";
 		$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEJDKFSDl6ndtqnRykHyahKnoQG_KN_hQ";
 		$scope.words = [];
 		$scope.info = {};
 		$scope.entityInfo = {};
 		$scope.dataHubEntities = {};
 	    $scope.orderProp = "name"; 
-	   
+	    $scope.episodeAudio = '';
 		
 		
 		$scope.desktop = screenSize.on('sm, md, lg', function(match){
 		    $scope.desktop = match;
 			
 		});
+		
 		$scope.mobile = screenSize.on('xs', function(match){
 		    $scope.mobile = match;
 		});
@@ -75,10 +104,10 @@ app.controller('MainController', ['$scope',  'screenSize', '$http', '$location',
 		}
 		
  	   $scope.examples = [ "Wolverton", "Milton Keynes", "Fenny_Stratford", "Open_University",  "Campbell_park", 
-							"Shenley_brook_end", "Central_milton_keynes", "Milton_keynes_theatre", "Bletchley_park", "Cineworld"];	
+							"Shenley_brook_end", "Central_milton_keynes", "Milton keynes theatre", "Bletchley_park", "Cineworld"];	
 	   
 	   
-	   $scope.audio = ngAudio.load("http://31.25.191.64:8000/;stream/1");
+	   $scope.liveAudio = ngAudio.load("http://31.25.191.64:8000/;stream/1");
 	   
 	   $scope.currentEnt = ""; 
 
@@ -103,7 +132,20 @@ app.controller('MainController', ['$scope',  'screenSize', '$http', '$location',
 			} 
 		}
 		
+		$scope.playEpisode= function(){
+			if (!$scope.liveAudio.paused ){ 
+				$scope.liveAudio.pause();
+			}
+			$scope.episodeText = $scope.currentEpisode.title;
+			if ($scope.episodeAudio.paused || $scope.episodeAudio == ''){
+				$scope.episodeAudio.play();
+			} else {
+				$scope.episodeAudio.pause();
+			}			
+		}
 		
+		
+					
 		$scope.openEpisode= function(epi){
 			$scope.words = [];
 			$scope.currentEpisode = epi;
@@ -180,14 +222,14 @@ app.controller('MainController', ['$scope',  'screenSize', '$http', '$location',
 				
 
 		}
-		
-		
-		
+	  
 		$scope.$watch(function () {
 		        return SharedState.get('event');
 		  }, function (newValue) {  	
 		        console.log('open modal: ' + newValue);
 		 });
+		 
+	
 			
 		$scope.home = function(){
 			$scope.query ="";

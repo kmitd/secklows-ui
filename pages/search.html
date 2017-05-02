@@ -1,136 +1,48 @@
 	 <div class="container" >		
 	 		<div class="scrollable" >
 	 		  <div class="scrollable-content">
-	 		    <div class="section" ui-state="searchBar">
+				<h1  ng-show="loading" style="color:#ccc" class="text-center">
+					<br/>
+					<i class="fa fa-spinner fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+				</h1>
+				  <div id="entity-search" ng-hide="loading" class="section" >		  	
 					
-						<!-- <div class="col-lg-2">
-							<div class="panel panel-info" >
-								<img  src="./docs/logos/secklowsig.png" />
-
-								<br/>
-							</div>
-						</div> -->
-			
-						<div class="col-lg-4 col-md-12 col-sm-12 col-sx-12">
-							<div class="panel panel-custom"> 
-								<div class="panel-heading"> 
-									<h3 class="panel-title">Listen to live radio</h3> 
-								</div> 
-								<div class="panel-body"> 
-						
-									<a >
-										<i class="fa fa-play fa-3x pull-left" ng-hide="!audio.paused" ng-click="audio.paused ? audio.play() : audio.pause()" ></i> 
-										<i class="fa fa-pause fa-3x pull-left" ng-hide="audio.paused" ng-click="audio.paused ? audio.play() : audio.pause()"></i>
-									</a>
-									
-									<a>
-										<i class="fa fa-volume-off fa-3x pull-right" ng-click="audio.volume==1 ? audio.volume=0 : audio.volume=1" ></i> 
-									</a>
-									
-									<input ng-if="mobile"  style="width:73%"  class='form-control pull-right' type=range min=0 max=1 step=0.01 ng-model='audio.volume'>
-						 	
-									<input ng-if="desktop" style="width:75%"  class='form-control pull-right' type=range min=0 max=1 step=0.01 ng-model='audio.volume'>
-								</div> 
-							</div>
-						</div>
-						
-						
-						<div class="col-lg-4 col-md-12 col-sm-12 col-sx-12">
-							<div class="panel panel-custom"> 
-								<div class="panel-heading"> 
-									<h3 class="panel-title">Be social</h3> 
-								</div> 
-								<div class="panel-body"> 
-									FILL HERE
-								</div> 
-							</div>
-						</div>
-						
-						
-						<div class="col-lg-8 col-md-12 col-sm-12 col-sx-12">
-							<div class="panel panel-custom"> 
-								<div class="panel-heading"> 
-									<h3 class="panel-title">Search for an entity</h3> 
-								</div> 
-								<div class="panel-body"> 
-									<input  ng-model="query" type="search" class="form-control" placeholder="Search episode..." />
-									<p></p>
-									<p  class='text-custom'>...or use an example</p>
-						
-									<ui-state id='activeTab' default=''></ui-state>
-									<div ng-if="desktop" class="btn-group nav-tabs justified">
-									        <a ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index' ng-if="$index >= 0 && $index < 5" ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" class="btn btn-default">{{clean(ex)}}</a>
-
-									</div>
-									<br/> 
- 									<div  ng-if="desktop" class="btn-group nav-tabs justified">
- 									        <a ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index' ng-if="$index >= 5 " ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" class="btn btn-default">{{clean(ex)}}</a>
-
- 									 </div>
-
- 									<div ng-if="mobile" class="btn-group nav-tabs justified">
- 									        <a ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index' ng-if="$index >= 0 && $index < 3" ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" class="btn btn-default">{{clean(ex)}}</a>
-
- 									</div>
- 									<br/> 
-  									<div  ng-if="mobile" class="btn-group nav-tabs justified">
-  									        <a ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index' ng-if="$index >= 3 && $index < 6" ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" class="btn btn-default">{{clean(ex)}}</a>
-
-  									 </div>
-  									<br/> 
-   									<div  ng-if="mobile" class="btn-group nav-tabs justified">
-   									        <a ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index' ng-if="$index >= 6 && $index < 9 " ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" class="btn btn-default">{{clean(ex)}}</a>
-
-   									 </div>
-									 
+					<input  ng-hide="loading"  ng-model="query" type="search" class="form-control " placeholder="Search for an entity..."/>
+			  		
+					<ui-state id='activeTab' default=''></ui-state>
+					<ul ng-hide="loading" class="pager" >
+			  			<li ui-set="{'activeTab': activeTab }" ng-repeat='ex in examples track by $index' ng-class="{'active': activeTab == $index}" ng-click="test(ex,$index)" ><a>{{clean(ex)}}</a></li>
+			  		</ul>
 										
-								</div> 
-							</div>
-					</div>
-					
-					
-			
-					
-					<div ng-show="loading" class="col-lg-12">
-						<div class="panel panel-custom">
-							<div class="panel-heading"> 
-								<h3  class="panel-title"><i class="fa fa-spinner fa-spin  fa-fw" aria-hidden="true"></i>Loading episodes...</h3> 
-							</div>
-						</div>
-					</div>				
-					<div ng-show="!loading && query" class="col-lg-12">
-						<div class="panel panel-custom"> 
-						
-							<div class="panel-heading"> 
-								<h3  class="panel-title">Related episodes</h3> 
-							</div> 
-							
-							<div ng-show="!loading" class="panel-body">
+				  </div> 
+				  
+				  
+	 		    <div class="section " ng-class="{'col-md-8' : desktop, 'col-lg-8' : desktop}" >
+						<ul class="list-group">
+							<li ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities " ng-hide="!query" ng-click="openEpisode(epi)"  class="list-group-item">
 								
-								<div ng-show="false">
-									<h5 ng-repeat="e in entities | filter : query" ng-if="query"> 
-										<span class="label label-custom" >{{e.label}}</span>
-			 						</h5>
-								</div>
-								
-								<ul class="list-group">
-									<li ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities " ng-hide="!query" ng-click="openEpisode(epi)"  class="list-group-item">
-										<p><strong>{{epi.title}}</strong>
-											 {{epi.descr | limitTo:50 }} ...
-										</p>
-										
-									</li>
-									
-								</ul>
-							
-							</div> 
-						</div>
-					</div>
-					
-					
-				
-<!-- close last 4 divs -->
+									<img class="img-episode pull-left" ng-src="./docs/shapes/{{4 | randomize}}.png" />
+									<h4 class="text-custom">{{epi.title}}</h4>
+									<p>{{epi.date || '29/03/2016 - Fake date'}}</p>
+									<p>{{epi.presenter || 'Fake presenter'}}</p>
+							</li>
+						</ul>			
 	 		    </div>
+				
+	 		    <div  ng-if="desktop" ng-hide="loading" id="socialSection" class="section col-md-4 col-lg-4"  >
+					
+					<a class="twitter-timeline"  data-chrome=" nofooter" data-tweet-limit="3" data-height="300" data-dnt="true" data-theme="light" data-link-color="#e9294b" href="https://twitter.com/SecklowSounds">Tweets by SecklowSounds</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+					
+					<br/><br/>
+					
+					<div class="fb-page" data-href="https://www.facebook.com/secklowsoundsradio/" data-width="400" data-tabs="timeline" data-height="300" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="false"><blockquote cite="https://www.facebook.com/secklowsoundsradio/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/secklowsoundsradio/">Secklow Sounds</a></blockquote></div>
+					
+					
+		         </div>
 	 		  </div>
 	 		</div>
 	 </div>
+
+	
+			
+					

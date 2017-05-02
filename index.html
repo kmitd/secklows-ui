@@ -2,11 +2,19 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Secklow Sound</title>
+    <title>SecklowSounds</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+	
+	<meta property="og:url"                content="https://data.mksmart.org/apps/secklowsounds/" />
+	<meta property="og:type"               content="webapp" />
+	<meta property="og:title"              content="SecklowSounds App" />
+	<meta property="og:description"        content="Community Radio for Milton Keynes" />
+	<meta property="og:image"              content="./docs/logos/favicon.png" />
+	
+	
     <link rel="shortcut icon" href="./docs/logos/favicon.png" type="image/x-icon" />
 
     <link rel="stylesheet" href="./css/mobile-angular-ui-hover.min.css" />
@@ -15,10 +23,19 @@
     <link rel="stylesheet" href="./css/font-awesome.min.css" />
 	<link href="./css/angular-selector.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/jqcloud.min.css" />
+	<link rel="stylesheet" href="./css/css_custom.css" />
 	
 
 	
-	<link rel="stylesheet" href="./css/css_custom.css" />
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+	
 	
 	
  	<script src="./js/jquery-1.11.1.min.js"></script>
@@ -35,8 +52,9 @@
 	<script src='./js/angular-chart.min.js'></script>
 	<script src="./js/jqcloud.min.js"></script>
 	<script src='./js/match-media.js'></script>
+	<script src="./js/re-tree.min.js"></script>
+	<script src="./js/ng-device-detector.min.js"></script>
     <script src="js/mainApp.js"></script>
-	
 	
 </head>
 
@@ -46,36 +64,92 @@
  
  <div class="app">
 
+	<div  class="navbar navbar-app navbar-absolute-bottom">
 
-	 <nav class="navbar navbar-default" >
-		<div class="container-fluid">
-		    <div class="navbar-header">
-		      <a class="navbar-brand " yield-to="title" href="#">
-		        <img id="imgLogo" alt="Brand" src="./docs/logos/favicon.png"/>
-		      </a>
-			  <div id="title" class="navbar-brand ">
-				<img  ng-if="mobile" id="logoMobile" src='./docs/logos/ss.png'/>
-			  	<span ng-if="desktop" class="text-custom" > <strong style="color:grey">Secklow Sounds</strong> <strong>community radio for  </strong> <strong style="color:black">Milton Keynes</strong>  </span> 
-			  </div>
-		    </div>
-           
-                
+	  <div style="color:grey" ng-hide="!liveAudio.paused " class="navbar-brand navbar-brand-center">
+	    Listen to what's on live 
+	  </div>
+	  <div style="color:grey" ng-hide="liveAudio.paused" class="navbar-brand navbar-brand-center">
+	    Now playing Secklow Sounds live
+	  </div>
+	  
+	  <div class="btn-group pull-left">
+	    <div ng-hide="!liveAudio.paused" class="btn btn-navbar fa fa-play fa-2x" ng-click="liveAudio.paused ? liveAudio.play() : liveAudio.pause()">		
+	    </div>
+		<div ng-hide="liveAudio.paused" class="btn btn-navbar fa fa-pause fa-2x" ng-click="liveAudio.paused ? liveAudio.play() : liveAudio.pause()">
+		 </div>
+		 
 
-   		
+	  </div>
+
+	  <div class="btn-group pull-right" >
+	    <div ng-if="desktop" class="btn btn-navbar" >
+	      	<input style="margin-top:7px" class='form-control' type=range min=0 max=1 step=0.01 ng-model='liveAudio.volume'>
+	    </div>
+	    <div ng-click="liveAudio.volume!=0 ? liveAudio.volume=0 : liveAudio.volume=1"  class="btn btn-navbar  fa fa-volume-off fa-3x pull-right" ng-show="liveAudio.volume!=0" > 
+	      
+	    </div>
+		<div ng-click="liveAudio.volume!=0 ? liveAudio.volume=0 : liveAudio.volume=1"  class="btn btn-navbar fa fa-volume-up fa-3x pull-right" ng-show="liveAudio.volume==0" > 
+	    </div>
+	  </div>
+	</div>
+
+	<!-- <div ng-show="!episodeAudio.paused && episodeAudio!=''" class="navbar navbar-app navbar-absolute-bottom">
+	  <div style="color:grey"  class="navbar-brand navbar-brand-center">
+		<div style="margin-top:-7px" class="btn btn-navbar" >
+			 Now listening <i>{{episodeText}}</i> - {{episodeAudio.currentTime | trackTime}}
+	    </div>
+	  </div>
+
+
+	  <div class="btn-group pull-left">
+
+	  </div>
+
+	  <div class="btn-group pull-right" >
+	   			<div ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="episodeAudio.muting" class="btn btn-navbar fa fa-volume-up fa-3x pull-right"  ></div>
+	   			<div ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="!episodeAudio.muting" class="btn btn-navbar fa fa-volume-off fa-3x pull-right"  ></div>
+
+	  </div>
+	</div> -->
+	
+
+<div  class="navbar navbar-app navbar-absolute-top">
+
+  <div class="navbar-brand navbar-brand-center">
+    <span ng-if="desktop" class="text-custom" > <strong style="color:grey">Secklow Sounds</strong> <strong>community radio for  </strong> <strong style="color:black">Milton Keynes</strong>  </span>
+  </div>
+
+  <div class="btn-group pull-left">
+    <div class="btn btn-navbar">
+		<img ng-click="home()" id="imgLogo" alt="Brand" src="./docs/logos/favicon.png"/>
+		<span ng-click="home()"  ng-if="mobile" class="text-custom" > <strong style="color:grey">secklow</strong><strong style="color:black">sounds</strong>  </span>
+    </div>
+  </div>
+
+  <div class="btn-group pull-right">
+	<a href="https://twitter.com/intent/tweet?screen_name=SecklowSounds" data-hashtags="MKliveNews"
+		 data-size="large" data-related="HitsSecklow" data-dnt="true"  data-hashtags="MKliveNews" data-show-count="false">
+		 	<div class="twitter-mention-button btn btn-navbar fa fa-twitter fa-lg"   ></div>
+	</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 			
-		  </div>
-	</nav>
-     
-	 
-	 <div class="navbar navbar-app navbar-absolute-bottom">
+			
+    <a class="btn btn-navbar  fa fa-whatsapp fa-lg" href="intent://send/0123456789#Intent;scheme=smsto;package=com.whatsapp;action=android.intent.action.SENDTO;end">
+    </a>
+	
+	<a class="btn btn-navbar fa fa-envelope fa-lg" ng-hide="isUnknown()" ng-href="{{sms}}" ></a>
+   
+	
+    <a  href="https://www.facebook.com/secklowsoundsradio/" target="_blank" class="btn btn-navbar fa fa-facebook fa-lg ">
+    </a>
+  </div>
+</div>
 
-         <span class="text-custom" id="title">  <strong>  </strong> </span> 
-
-     </div>
 
      <div class="app-body">
          <ng-view class="app-content"></ng-view>
      </div>
+	 
 
  </div>
  

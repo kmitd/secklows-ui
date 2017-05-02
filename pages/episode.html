@@ -1,25 +1,57 @@
 
 <div class="container"  ng-swipe-left="goto('home')" >		
 	<div class="scrollable">
-		<div class="scrollable-content section"  >
+		<div class="scrollable-content "  >
+			
+			<div style="background-color:#ccc;border-bottom:1px solid #21a3a6" class="section">
+				
+				<div class="col-sm-7 col-xs-7 col-md-7 col-lg-7">
+					<h2 class="text-custom">  {{currentEpisode.title}}</h2>
+					<h4 class="text-custom-secondary">  {{epi.date || '29/03/2016 - Fake date'}}</h4>
+					<h5 class="text-custom-secondary">  {{epi.presenter || 'Fake presenter'}}</h5>
+					<div  ng-show="episodeAudio.paused" ng-click="playEpisode()"  class="btn  btn-default  fa fa-headphones fa-2x btn-custom"> </div>
+					<div ng-show="!episodeAudio.paused" ng-click="playEpisode()"  class="btn  btn-default  fa fa-pause fa-2x btn-custom"> </div>			
+  				  	<div ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="episodeAudio.muting" class="btn  btn-default  fa fa-volume-up fa-2x btn-custom"  ></div> 
+				   	<div ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="!episodeAudio.muting" class="btn  btn-default  fa fa-volume-off fa-2x btn-custom"  ></div>
+					
+					
+					<div ng-show="!episodeAudio.paused" class="">
+							<small>Playing podcast... {{episodeAudio.currentTime | trackTime}}</small>
+					</div>
+					
+					
+					
+					
+					
+				</div>
+				
+				<div class="col-sm-5 col-xs-5 col-md-5 col-lg-5">	
+					
+					<img class="img-episode pull-right" ng-src="./docs/shapes/{{4 | randomize}}.png" />
+				</div>
+				
+				
+			</div>
+			<div class="section">
+				<h4 class="text-custom">  What did we talk about?</h4>
+					<jqcloud id="wordcloud" words="words" colors="{{colors}}" ng-click="openInfo()" ui-turn-on="event" autoResize="true"  afterWordRender="{{updateWord()}}" auto-resize="true"  height="350" steps="10"></jqcloud>	
+			</div>
 			
 			<div ui-content-for="modals">
 			  <div class="scrollable-content  modal" ui-if="event" ui-state="event">
-			    	<div class="modal-overlay"> 
+			    	<div class="modal-overlay">
 				</div>
-  
+
 			    <div class="modal-dialog">
 			      <div class="modal-content">
 			        <div class="modal-header">
 			          <button class="close" ui-turn-off="event" ng-click="reset()">x</button>
-			          <h4 class="modal-title"  ng-show="hasDatahubInfo()" >More info from the datahub </h4>
+			          <h4 class="modal-title text-custom"  ng-show="hasDatahubInfo()" >{{currentEnt}}</h4>
 					  <h4 class="modal-title" ng-hide="hasDatahubInfo()">No info from the datahub!</h4>
 			        </div>
-      
+					
+
 			        <div ng-show="hasDatahubInfo()" class="modal-body">
-						<h3 class="text-custom">{{currentEnt}}</h3>
-							<br/>
-						
  						   <div ng-show="entityInfo['coordinates']" map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
  								<h4 class="text-custom">Map</h4>
 								<ng-map class="gmap" center="{{entityInfo['coordinates']}}" zoom="13">
@@ -27,43 +59,77 @@
  							  	</ng-map>
  							<hr/>
 							</div>
-							
-							
-							<div class="row"> 
-								<div ng-repeat="photo in entityInfo.photos"  class="col-sm-2 col-xs-2 col-md-2"> 
-									<div class="thumbnail"> 
-										<a href="{{photo.url}}" target="_blank">
-											<img alt="{{photo.alt}}" style="height: 80px; width: 100%; display: block;"   src="{{photo.thumbnail}}"  > 
-										</a>
-										<div class="caption"> 
-											<p >
-												{{limit(photo.desc)}}
-											</p> 
-										</div> 
-									</div> 
-								</div> 
+
+
+							<div class="row">
+									<div ng-repeat="photo in entityInfo.photos track by $index" ng-if="$index > 0 && $index <5" class="col-sm-3 col-xs-3 col-md-3  col-lg-3">
+										<div class="thumbnail">
+											<a href="{{photo.url}}" target="_blank">
+												<img alt="{{photo.alt}}"  src="{{photo.thumbnail}}"  >
+											</a>
+											<div class="caption">
+												<p >
+													{{limit(photo.desc)}}
+												</p>
+											</div>
+										</div>
+									</div>
 							</div>
 							
+							<div class="row">
+									<div ng-repeat="photo in entityInfo.photos track by $index" ng-if="$index >= 5 && $index <9" class="col-sm-3 col-xs-3 col-md-3  col-lg-3">
+										<div class="thumbnail">
+											<a href="{{photo.url}}" target="_blank">
+												<img alt="{{photo.alt}}"  src="{{photo.thumbnail}}"  >
+											</a>
+											<div class="caption">
+												<p >
+													{{limit(photo.desc)}}
+												</p>
+											</div>
+										</div>
+									</div>
+							</div>
+							
+							
+							<div class="row">
+								<div ng-repeat="photo in entityInfo.photos track by $index" ng-if="$index >= 9" class="col-sm-3 col-xs-3 col-md-3  col-lg-3">
+									<div class="thumbnail">
+										<a href="{{photo.url}}" target="_blank">
+											<img alt="{{photo.alt}}"  src="{{photo.thumbnail}}"  >
+										</a>
+										<div class="caption">
+											<p >
+												{{limit(photo.desc)}}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+
+
+
 							<div ng-show="entityInfo['population_projection']">
 								<h4 class="text-custom">Population projection</h4>
 								<canvas id="pop-proj-container" class="chart chart-line " chart-data="entityInfo['population_projection'].data" chart-labels="entityInfo['population_projection'].labels"></canvas>
 							<hr/>
 							</div>
-							
+
 							<div ng-show="entityInfo['age']">
 								<h4 class="text-custom">Population age</h4>
 								<canvas id="age-container" class="chart chart-bar " chart-data="entityInfo['age'].data" chart-labels="entityInfo['age'].labels"></canvas>
 							<hr/>
 							</div>
-							
-							
+
+
 							<div ng-show="entityInfo['economy']">
 								<h4 class="text-custom">Economical activities</h4>
 								 <canvas id="economy-bar-container" class="chart chart-bar " chart-options="entityInfo.economy.options" chart-data="entityInfo.economy.data"  chart-labels="entityInfo.economy.labels" ></canvas>
 							</div>
-							
+
 							<div >
-								<h4 class="text-custom" >Additional info</h4>
+								<h4 class="text-custom"  >Additional info</h4>
 								<ul class="list-group" >
 								<li class="list-group-item" ng-repeat="(key,prop) in entityInfo " ng-if="prop.other" >
 									<strong class="text-custom">{{key}}</strong>: {{prop.value}}
@@ -71,78 +137,56 @@
 								<ul>
 								<hr/>
 							</div>
-						
-							
+
+
 					</div> 
 			      </div>
 			    </div>
 			  </div>
 			</div>
-			
-			
-			  <div class="panel panel-custom" >
-			    <div class="panel-heading">        
+
+
+			  <!-- <div class="panel panel-custom" >
+			    <div class="panel-heading">
 			      <h4 class="panel-title">
-			          {{currentEpisode.title}}
+
 			      </h4>
 			    </div>
 			    <div>
 			      <div class="panel-body">
-					  
+
 					 <strong> Listen to the episode</strong>
 					 <br/>
-					 <div class="btn-group btn-group-justified" > 
+					 <div class="btn-group btn-group-justified" >
 						 <a ng-click="episodeAudio.paused ? episodeAudio.play() : episodeAudio.pause()" class="btn btn-default" >
   						  <i ng-hide="!episodeAudio.paused" class="fa fa-play fa-2x" ></i>
   						  <i ng-hide="episodeAudio.paused" class="fa fa-pause fa-2x" ></i>
-						 </a> 
+						 </a>
 						 <a  class="btn btn-default" >
 						 	<input class="form-control" type="range" min="0" max="1" step="0.01" ng-model="episodeAudio.progress">
-						 </a> 
+						 </a>
 						 <a class="btn btn-default" >
-							 {{episodeAudio.currentTime | trackTime}}	
-							  
-						 </a> 
+							 {{episodeAudio.currentTime | trackTime}}
+
+						 </a>
 
 						 <a class="btn btn-default " ng-click="episodeAudio.volume==1 ? episodeAudio.volume=0 : episodeAudio.volume=1">
 						     <i class="fa fa-volume-off fa-2x " ng-show="episodeAudio.volume==1" ></i>
 						     <i class="fa fa-volume-up fa-2x" ng-show="episodeAudio.volume==0" ></i>
-			
 						 </a>
 
 						 <a class="btn btn-default" >
 							<input  class='form-control' type=range min=0 max=1 step=0.01 ng-model='episodeAudio.volume'>
 						 </a>
 					 </div>
-					  
-					  
-					  
-			        <!-- <strong>Title</strong>  {{currentEpisode.title}} -->
-					<!-- <p/> -->
-			        <!-- <strong>Episode ID</strong> {{currentEpisode.name}} -->
 					<p/>
-					
-					
-					<strong>What did we talk about?</strong>
-					<div >
-						<jqcloud id="wordcloud" words="words" ng-click="openInfo()" ui-turn-on="event" autoResize="true"  afterWordRender="{{updateWord()}}" auto-resize="true"  height="350" steps="10"></jqcloud>
-					</div>	 
-					 
-				  </div>
-				  
-				  
+				   </div>
 			    </div>
-			  </div>
-			
-			
-			
+			  </div> -->
+
 			<h3>
 				<a><i class="fa fa-chevron-circle-left"  ng-click="home()"></i></a>
 			</h3>
-			
-				
-		</div>
-			
-		
+		</div> 		
 	</div>
 </div>
