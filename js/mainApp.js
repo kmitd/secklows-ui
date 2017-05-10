@@ -33,8 +33,9 @@ angular.module('SecklowApp').filter('randomize', function() {
   }
 });
 
-app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$http', '$location', 'ngAudio', 'SharedState',
-    function($scope,  screenSize, deviceDetector, $http, $location, ngAudio, SharedState,ngMap) {   
+app.controller('MainController', 
+			['$scope', 'screenSize', 'deviceDetector','$http', '$location', 'ngAudio', 'SharedState', 
+    function($scope, screenSize, deviceDetector, $http, $location, ngAudio, SharedState,  ngMap) {   
       
 	  	if (deviceDetector.os == 'android' ) {
 	  		$scope.sms = "sms:+447539509448?body=My%20text%20for%20Secklow%20Sounds";
@@ -61,9 +62,11 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 		$scope.info = {};
 		$scope.entityInfo = {};
 		$scope.dataHubEntities = {};
-	    $scope.orderProp = "name"; 
+	    $scope.orderProp = "date"; 
 	    $scope.episodeAudio = '';
-		
+
+		$scope.pageCounter = 0 ;
+		$scope.episodesDownloads ={};
 		
 		$scope.desktop = screenSize.on('sm, md, lg', function(match){
 		    $scope.desktop = match;
@@ -73,17 +76,20 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 		$scope.mobile = screenSize.on('xs', function(match){
 		    $scope.mobile = match;
 		});
-		
-		
+				
 		 
 		$http.get('docs/secklow_ann.json').success(function(data) {
 		   $scope.episodes = data;
-		   
 		}).error(
 			function(data){
-				console.log("uups loading issue");
+				console.log("Problem while loading episodes");
 			}
-		);
+		).then( function(){
+			console.log('Finished loading episodes');
+			$scope.loading = false;
+		});
+		
+		
 		
 		$scope.loading = true;
 		$http.get('./docs/datahub_entities.json').success(function(data) {
@@ -92,23 +98,41 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 		   // console.log($scope.dataHubEntities);
 		}).error(
 			function(data){
-				console.log("uups loading issue");
+				console.log("Problem while loading DH entities");
 			}
 		).then( function(){
-			console.log('Finished loading');
+			console.log('Finished loading DH entities');
 			$scope.loading = false;
 		});
+		
+		// TODO TEMPorary solution, will be replaced with the new data (containing download url)
+		$http.get('./docs/episodes-downloads.csv').success(function(data) {
+		  
+			var split  = data.split('\n');
+			
+			for (var i = 0 ; i < split.length ; i++ ){
+				var line = split[i].split(','); 
+				var podcastName = line[1].split('/')[line[1].split('/').length-1];
+				$scope.episodesDownloads[line[0]]=podcastName;
+			}
+		}).error(
+			function(data){
+				console.log("Problem while loading podcasts");
+			}
+		).then( function(){
+			console.log('Finished loading podcasts' );
+		});
+		
 		
 		$scope.getWidth = function(){
 			return 800;
 		}
 		
- 	   $scope.examples = [ "Wolverton", "Milton Keynes", "Fenny_Stratford", "Open_University",  "Campbell_park", 
-							"Shenley_brook_end", "Central_milton_keynes", "Milton keynes theatre", "Bletchley_park", "Cineworld"];	
+ 	   $scope.examples = [ "Wolverton", "Milton Keynes", "Fenny Stratford", "Open University",  "Campbell park", 
+							"Shenley brook end", "Central milton keynes", "Milton keynes theatre", "Bletchley park", "Cineworld"];	
 	   
-	   
-	   $scope.liveAudio = ngAudio.load("http://31.25.191.64:8000/;stream/1");
-	   
+	  
+	   $scope.liveAudio = ngAudio.load("http://31.25.191.64:8000/;stream/1");	   
 	   $scope.currentEnt = ""; 
 
 	   $scope.test = function(ex,ix){
@@ -117,55 +141,60 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 		   $scope.query = ex;
 	   };
 		
-		// this does not show episodes with no entities
-		// TODO use angular for this
-		$scope.filterFct = function(epi){
-			var size = 0;
-			for (key in epi.entities){
-				size++;
-			}
-			if (size > 1) {
-				return true;  
-			} 
-			else {
-				return false;
-			} 
-		}
 		
-		$scope.playEpisode= function(){
-			if (!$scope.liveAudio.paused ){ 
-				$scope.liveAudio.pause();
+		$scope.playEpisode= function(){	
+		
+			if (!$scope.liveAudio.paused ){
+				$scope.liveAudio.stop();
 			}
+
+			 // $scope.episodeAudio  =  ngAudio.load("http://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
+			console.log($scope.episodeAudio);
+
 			$scope.episodeText = $scope.currentEpisode.title;
-			if ($scope.episodeAudio.paused || $scope.episodeAudio == ''){
-				$scope.episodeAudio.play();
+			// if ($scope.episodeAudio.paused || $scope.episodeAudio == ''){
+// 				$scope.episodeAudio.play();
+// 			}
+
+			var isPlaying = $scope.episodeAudio.currentTime > 0 && !$scope.episodeAudio.paused && !$scope.episodeAudio.ended ;
+			console.log(isPlaying);
+
+			if (!isPlaying) {
+			  $scope.episodeAudio.play();
 			} else {
-				$scope.episodeAudio.pause();
-			}			
+				$scope.episodeAudio.destroy();
+				console.log('ooo');
+				$scope.episodeAudio  =  ngAudio.load("http://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
+		   
+			}
+
 		}
 		
+		$scope.pauseEpisode = function(){		
+			$scope.episodeAudio.pause();			
+		}
 		
-					
 		$scope.openEpisode= function(epi){
+			
 			$scope.words = [];
 			$scope.currentEpisode = epi;
-			$scope.episodeAudio = ngAudio.load("./docs/audio_test.mp3"); 
 			
-			for (var ent=0; ent < epi.entities.length; ent++){
-				// if (epi.entities[ent]['dh'].length > 0  ){
-				
+			// console.log($scope.episodesDownloads[$scope.currentEpisode.name]);
+			$scope.episodeAudio  =  ngAudio.load("http://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
+		   
+			for (var ent=0; ent < epi.entities.length; ent++){	
 				if ($scope.dataHubEntities.hasOwnProperty(epi.entities[ent].text)){
 					
 					if (epi.entities[ent]['dh'].length > 0  ) {
 						epi.entities[ent]['weight'] = 5000;
 					} 
 					epi.entities[ent]['color'] = '#e9294b';
-					
 					epi.entities[ent]['html'] = {class:'fake-link'};
 				}
 				epi.entities[ent]['text'] = $scope.clean(epi.entities[ent]['text']);
 				$scope.words.push(epi.entities[ent]);
 			}
+			
 			console.log($scope.words.length,"words");
 			$location.path('/episode');	
 		}	
@@ -233,9 +262,11 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 			
 		$scope.home = function(){
 			$scope.query ="";
+			$scope.currentEpisode = {};
 			$location.path('/');
 		}
 		
+		// PRIVATE FUNCTIONS
 		
 		function getTopic(entity){
 			
@@ -364,6 +395,18 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 		}
 
 		
+		// UTILITY FUNCTIONS
+		
+		$scope.nextPages = function(){
+			$scope.pageCounter= $scope.pageCounter+10;
+			console.log($scope.pageCounter);
+		}
+		
+		$scope.previousPages = function(){
+			$scope.pageCounter = $scope.pageCounter-10;
+			console.log($scope.pageCounter);
+		}
+		
 		$scope.reset = function(){
 			$scope.currentEnt = "";
 			$scope.entityInfo = {};
@@ -384,12 +427,17 @@ app.controller('MainController', ['$scope',  'screenSize', 'deviceDetector','$ht
 			}
 		}
 		
-		$scope.clean = function(word){
-			
+		$scope.clean = function(word){	
 			return word.split("_").join(" ");
 		}
 	
-		
+		$scope.revert = function(inputDate) {
+			if (inputDate == undefined ) {
+				return inputDate;
+			}
+			var date = inputDate.split(" ")[0];
+			return date.split("-")[2]+"/"+date.split("-")[1]+"/"+date.split("-")[0];
+		}
 		
 	}
 ]);

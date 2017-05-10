@@ -17,15 +17,19 @@
 				  </div> 
 				  
 				  
-	 		    <div class="section " ng-class="{'col-md-8' : desktop, 'col-lg-8' : desktop}" >
+	 		    <div class="section " ng-hide="!query" ng-class="{'col-md-8' : desktop, 'col-lg-8' : desktop}" >
 						<ul class="list-group">
-							<li ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities " ng-hide="!query" ng-click="openEpisode(epi)"  class="list-group-item">
-								
+							<li ng-repeat="epi in episodes | orderBy : orderProp | filter: query : comparator: epi.entities | limitTo:10:pageCounter"  ng-click="openEpisode(epi)"  class="list-group-item clearfix">
 									<img class="img-episode pull-left" ng-src="./docs/shapes/{{4 | randomize}}.png" />
 									<h4 class="text-custom">{{epi.title}}</h4>
-									<p>{{epi.date || '29/03/2016 - Fake date'}}</p>
-									<p>{{epi.presenter || 'Fake presenter'}}</p>
+									<small><em> We talked about</em> <strong class="text-custom">{{query}}</strong>
+									<p ng-if="epi.date != '' || epi.date != undefined ">{{ revert(epi.date) }}</p>
+									<p ng-if="epi.presenter != '' || epi.presenter != undefined ">{{ epi.presenter }}</p>
 							</li>
+						</ul>	
+						<ul class="pager">
+							<li ng-click="previousPages()"><a ng-if="(episodes|filter:query).length > 10" > Previous </a></li>
+							<li ng-click="nextPages()"><a ng-if="(episodes|filter:query).length > 10" > Next </a></li>
 						</ul>			
 	 		    </div>
 				
