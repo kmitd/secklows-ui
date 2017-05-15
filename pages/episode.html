@@ -11,14 +11,14 @@
 					<!-- <h5 class="text-custom-secondary">  {{epi.presenter || ''}}</h5> -->
 					
 					
-					<p ng-show="episodeAudio.error">Podcast unavailable</p>
-					 <div ng-click="playEpisode()"  class="btn  btn-default  fa fa-headphones fa-2x btn-custom"> </div>
-				     <div ng-click="pauseEpisode()"  class="btn  btn-default  fa fa-pause fa-2x btn-custom"></div>
+					<p><small ng-show="noAudio"><em>Podcast unavailable</em></small></p>
+					 <div ng-click="playEpisode()" ng-disabled="noAudio" ng-show="episodeAudio.paused" ng-disabled="noAudio" class="btn  btn-default  fa fa-headphones fa-2x btn-custom"> </div>
+				     <div ng-click="pauseEpisode()" ng-show="!episodeAudio.paused " class="btn  btn-default  fa fa-pause fa-2x btn-custom"></div>
 					<!-- <div  ng-show="episodeAudio.paused" ng-click="playEpisode()"  class="btn  btn-default  fa fa-headphones fa-2x btn-custom"> </div> -->
 					<!-- <div ng-show="!episodeAudio.paused " ng-click="pauseEpisode()"  class="btn  btn-default  fa fa-pause fa-2x btn-custom"> </div> 	  -->
 						
-  				  	<div ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="episodeAudio.muting" class="btn  btn-default  fa fa-volume-up fa-2x btn-custom"  ></div> 
-				   	<div ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="!episodeAudio.muting" class="btn  btn-default  fa fa-volume-off fa-2x btn-custom"  ></div>
+  				  	<div   ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="episodeAudio.muting" class="btn  btn-default  fa fa-volume-up fa-2x btn-custom"  ></div> 
+				   	<div ng-hide="noAudio"  ng-click='episodeAudio.muting = !episodeAudio.muting' ng-show="!episodeAudio.muting" class="btn  btn-default  fa fa-volume-off fa-2x btn-custom"  ></div>
 					
 					
 					<div ng-show="!episodeAudio.paused" class="">

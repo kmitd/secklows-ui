@@ -86,43 +86,39 @@ app.controller('MainController',
 			}
 		).then( function(){
 			console.log('Finished loading episodes');
-			$scope.loading = false;
+		// TODO TEMPorary solution, will be replaced with the new data (containing download url)
+			
+			$http.get('./docs/episodes-downloads.csv').success(function(data) {
+		  
+				var split  = data.split('\n');
+				for (var i = 0 ; i < split.length ; i++ ){
+					var line = split[i].split(','); 
+					var podcastName = line[1].split('/')[line[1].split('/').length-1];
+					$scope.episodesDownloads[line[0]]=podcastName;
+				}
+			}).error(
+				function(data){
+					console.log("Problem while loading podcasts");
+				}
+			).then( function(){
+				console.log('Finished loading podcasts' );
+				$http.get('./docs/datahub_entities.json').success(function(data) {
+		  
+				   $scope.dataHubEntities = data;
+				   // console.log($scope.dataHubEntities);
+				}).error(
+					function(data){
+						console.log("Problem while loading DH entities");
+					}
+				).then( function(){
+					console.log('Finished loading DH entities');
+					$scope.loading = false;
+				});
+			});
 		});
-		
 		
 		
 		$scope.loading = true;
-		$http.get('./docs/datahub_entities.json').success(function(data) {
-		  
-		   $scope.dataHubEntities = data;
-		   // console.log($scope.dataHubEntities);
-		}).error(
-			function(data){
-				console.log("Problem while loading DH entities");
-			}
-		).then( function(){
-			console.log('Finished loading DH entities');
-			$scope.loading = false;
-		});
-		
-		// TODO TEMPorary solution, will be replaced with the new data (containing download url)
-		$http.get('./docs/episodes-downloads.csv').success(function(data) {
-		  
-			var split  = data.split('\n');
-			
-			for (var i = 0 ; i < split.length ; i++ ){
-				var line = split[i].split(','); 
-				var podcastName = line[1].split('/')[line[1].split('/').length-1];
-				$scope.episodesDownloads[line[0]]=podcastName;
-			}
-		}).error(
-			function(data){
-				console.log("Problem while loading podcasts");
-			}
-		).then( function(){
-			console.log('Finished loading podcasts' );
-		});
-		
 		
 		$scope.getWidth = function(){
 			return 800;
@@ -148,25 +144,26 @@ app.controller('MainController',
 				$scope.liveAudio.stop();
 			}
 
-			 // $scope.episodeAudio  =  ngAudio.load("http://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
-			console.log($scope.episodeAudio);
 
 			$scope.episodeText = $scope.currentEpisode.title;
-			// if ($scope.episodeAudio.paused || $scope.episodeAudio == ''){
-// 				$scope.episodeAudio.play();
-// 			}
-
-			var isPlaying = $scope.episodeAudio.currentTime > 0 && !$scope.episodeAudio.paused && !$scope.episodeAudio.ended ;
-			console.log(isPlaying);
-
-			if (!isPlaying) {
-			  $scope.episodeAudio.play();
-			} else {
-				$scope.episodeAudio.destroy();
-				console.log('ooo');
-				$scope.episodeAudio  =  ngAudio.load("http://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
-		   
+			if ($scope.episodeAudio.paused || $scope.episodeAudio == ''){
+				$scope.episodeAudio.play();
+				console.log(isNaN($scope.episodeAudio.duration),$scope.episodeAudio.duration);
+				if (isNaN($scope.episodeAudio.duration)){
+					$scope.noAudio =true;
+				}
+				
 			}
+
+			// var isPlaying = $scope.episodeAudio.currentTime > 0 && !$scope.episodeAudio.paused && !$scope.episodeAudio.ended ;
+			// console.log(isPlaying);
+			// if (!isPlaying) {
+			//   $scope.episodeAudio.play();
+			// } else {
+			// 	$scope.episodeAudio.destroy();
+			// 	console.log('ooo');
+			// 	$scope.episodeAudio  =  ngAudio.load("https://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
+			// }
 
 		}
 		
@@ -179,9 +176,9 @@ app.controller('MainController',
 			$scope.words = [];
 			$scope.currentEpisode = epi;
 			
-			// console.log($scope.episodesDownloads[$scope.currentEpisode.name]);
 			$scope.episodeAudio  =  ngAudio.load("http://mkinsight.org/secklow-podcasts/"+$scope.episodesDownloads[$scope.currentEpisode.name]);
-		   
+			$scope.noAudio=false;
+
 			for (var ent=0; ent < epi.entities.length; ent++){	
 				if ($scope.dataHubEntities.hasOwnProperty(epi.entities[ent].text)){
 					
